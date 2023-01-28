@@ -15,7 +15,7 @@ User = get_user_model()
 
 
 class AuthViewSet(viewsets.GenericViewSet):
-    # permission_classes = [AllowAny, ]
+    permission_classes = [AllowAny, ]
     serializer_class = serializers.EmptySerializer
     serializer_classes = {
         'login': serializers.UserLoginSerializer,
@@ -23,7 +23,6 @@ class AuthViewSet(viewsets.GenericViewSet):
     }
 
     @action(methods=['POST', ], detail=False)
-    @permission_classes([AllowAny])
     def login(self, request):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -49,7 +48,6 @@ class AuthViewSet(viewsets.GenericViewSet):
 
     @action(methods=['POST', ], detail=False)
     def logout(self, request):
-        print(request.user)
         logout(request)
         data = {'success': 'Sucessfully logged out'}
         return Response(data=data, status=status.HTTP_200_OK)
